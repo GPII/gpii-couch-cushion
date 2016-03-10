@@ -1,0 +1,36 @@
+{
+  "name": "gpii-couch-cushion",
+  "version": "1.0.0",
+  "description": "A helper package to assist in working with CouchDB from within Fluid components.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node tests/js/all-tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GPII/gpii-couch-cushion/"
+  },
+  "author": "Tony Atkins <tony@raisingthefloor.org>",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://issues.gpii.net/browse/GPII"
+  },
+  "homepage": "https://github.com/GPII/gpii-couch-cushion/",
+  "dependencies": {
+    "infusion": "2.0.0-dev.20151211T025229Z.eabb4fc",
+    "kettle": "git://github.com/amb26/kettle.git#cae26e655b57647a0a70fed4ba32b96d5e885c5e"
+  },
+  "devDependencies": {
+    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express.git#d4eee18a0f2286624fe70c7e0565a51a9fda3d0e",
+    "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#f2c57ad5e57ed9a33f9ebd3bacd364da9e66163a",
+    "grunt": "0.4.4",
+    "grunt-contrib-jshint": "0.9.0",
+    "grunt-jsonlint": "1.0.4",
+    "grunt-shell": "0.6.4",
+    "node-jqunit": "~1.1.3"
+  }
+}
