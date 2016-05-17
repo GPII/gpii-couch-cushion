@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "gpii-express": "git://github.com/the-t-in-rtf/gpii-express.git#d3a21a9247a30a9bd9d0e8a3b6ffa9152a572b03",
-    "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#280291cc1d598e5f2626461659f86193d78ef862",
+    "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#ec34204f1eb59e0b8039ec92d0e52a84f692658f",
     "grunt": "0.4.4",
     "grunt-contrib-jshint": "0.9.0",
     "grunt-jsonlint": "1.0.4",

@@ -8,16 +8,16 @@ var jqUnit = require("node-jqunit");
 
 require("../../src/js/lib/transformEach");
 
-fluid.registerNamespace("gpii.couch.cushion.tests.transformEach");
+fluid.registerNamespace("gpii.tests.couch.cushion.transformEach");
 
-gpii.couch.cushion.tests.transformEach.runSingleTest = function (testDefinition) {
-    jqUnit.test(testDefinition.message, function(){
+gpii.tests.couch.cushion.transformEach.runSingleTest = function (testDefinition) {
+    jqUnit.test(testDefinition.message, function () {
         var output = fluid.model.transformWithRules(testDefinition.input, testDefinition.rules);
         jqUnit.assertDeepEq(testDefinition.message, testDefinition.expected, output);
     });
 };
 
-fluid.defaults("gpii.couch.cushion.tests.transformEach.testRunner", {
+fluid.defaults("gpii.tests.couch.cushion.transformEach.testRunner", {
     gradeNames: ["fluid.component"],
     rules: {
         "": {
@@ -94,9 +94,9 @@ fluid.defaults("gpii.couch.cushion.tests.transformEach.testRunner", {
         },
         "onCreate.runTests": {
             funcName: "fluid.each",
-            args:     ["{that}.options.tests", gpii.couch.cushion.tests.transformEach.runSingleTest]
+            args:     ["{that}.options.tests", gpii.tests.couch.cushion.transformEach.runSingleTest]
         }
     }
 });
 
-gpii.couch.cushion.tests.transformEach.testRunner();
+gpii.tests.couch.cushion.transformEach.testRunner();

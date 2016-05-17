@@ -9,12 +9,28 @@
 // TODO:  Discuss with Antranig how best to break this down properly into a writable and read-only grade.
 "use strict";
 var fluid = fluid || require("infusion");
+var gpii  = fluid.registerNamespace("gpii");
 
 fluid.require("%kettle");
 
 require("./lib/transformEach");
 
 // TODO:  Update this to pass in "reader" grades so that we can easily use either a raw `kettle.dataSource.URL` or our own `urlEncodedJsonReader`.
+
+fluid.registerNamespace("gpii.couchdb.cushion.dataSource.asymmetric");
+gpii.couchdb.cushion.dataSource.asymmetric.fireEventAndPassthrough = function (that, eventName, payload, isError) {
+    var togo = fluid.promise();
+    that.events[eventName].fire(payload);
+
+    if (isError) {
+        togo.reject(payload);
+    }
+    else {
+        togo.resolve(payload);
+    }
+
+    return togo;
+};
 
 fluid.defaults("gpii.couchdb.cushion.dataSource.asymmetric", {
     gradeNames: ["fluid.component"],
@@ -55,10 +71,12 @@ fluid.defaults("gpii.couchdb.cushion.dataSource.asymmetric", {
                 termMap:     "{gpii.couchdb.cushion.dataSource.asymmetric}.options.readTermMap",
                 listeners: {
                     "onError.notifyParent": {
-                        func: "{gpii.couchdb.cushion.dataSource.asymmetric}.events.onReadError.fire"
+                        funcName: "gpii.couchdb.cushion.dataSource.asymmetric.fireEventAndPassthrough",
+                        args:     ["{gpii.couchdb.cushion.dataSource.asymmetric}", "onReadError", "{arguments}.0", true] // component, eventName, payload, isError
                     },
                     "onRead.notifyParent": {
-                        func: "{gpii.couchdb.cushion.dataSource.asymmetric}.events.onRead.fire"
+                        funcName: "gpii.couchdb.cushion.dataSource.asymmetric.fireEventAndPassthrough",
+                        args:     ["{gpii.couchdb.cushion.dataSource.asymmetric}", "onRead", "{arguments}.0"] // component, eventName, payload
                     }
                 }
             }
@@ -75,10 +93,12 @@ fluid.defaults("gpii.couchdb.cushion.dataSource.asymmetric", {
                 termMap:     "{gpii.couchdb.cushion.dataSource.asymmetric}.options.writeTermMap",
                 listeners: {
                     "onError.notifyParent": {
-                        func: "{gpii.couchdb.cushion.dataSource.asymmetric}.events.onWriteError.fire"
+                        funcName: "gpii.couchdb.cushion.dataSource.asymmetric.fireEventAndPassthrough",
+                        args:     ["{gpii.couchdb.cushion.dataSource.asymmetric}", "onWriteError", "{arguments}.0", true] // component, eventName, payload, isError
                     },
                     "onWrite.notifyParent": {
-                        func: "{gpii.couchdb.cushion.dataSource.asymmetric}.events.onWrite.fire"
+                        funcName: "gpii.couchdb.cushion.dataSource.asymmetric.fireEventAndPassthrough",
+                        args:     ["{gpii.couchdb.cushion.dataSource.asymmetric}", "onWrite", "{arguments}.0"] // component, eventName, payload
                     }
                 }
             }
