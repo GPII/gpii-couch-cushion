@@ -30,12 +30,14 @@ fluid.defaults("my.dataSource", {
 });
 
 var dataSource = my.dataSource();
-dataSource.get({ keys: ["1", "2", null, undefined]});
+dataSource.get({ keys: [1, 2, null, undefined]});
 ```
 This example grade makes a request and then logs the results.  Based on the supplied data, the call to the `get`
 invoker makes a GET request to the following URL:
 
 `http://localhost:6789/rest/endpoint?keys=1&keys=2`
+
+Note that the `null` and `undefined` options were stripped based on the default options passed to `Qs.stringify` (see below).
 
 Let's look at a more complex example with deeper structures:
 
@@ -52,6 +54,17 @@ In this case, the GET request would use the following URL:
 Although our default options were able to simplify the first example to avoid using square brackets, the deep variable
 `baz.qux` in the second example has to be represented using fuller notation.  See
 [the documentation for `qs.stringify`](https://github.com/ljharb/qs#stringifying) for full details.
+
+It is important to note that although `Qs` and Express can preserve deep structure, the final values can only be passed
+as strings.  As an example:
+
+```
+dataSource.get({ keys: [1, true, "string", null, undefined]});
+
+// The server ends up with string values, as in: { keys: ["1", "true", "string"] }
+```
+
+You are expected to convert the received values into booleans, numbers, etc. as required.
 
 # Component Options
 
