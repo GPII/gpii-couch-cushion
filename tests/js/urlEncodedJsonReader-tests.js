@@ -24,8 +24,6 @@ fluid.defaults("gpii.tests.couchdb.cushion.dataSource.urlEncodedJsonReader.dataS
     }
 });
 
-// TODO:  Confirm that writing data fails.
-
 fluid.defaults("gpii.tests.couchdb.cushion.dataSource.urlEncodedJsonReader.caseHolder", {
     gradeNames: ["gpii.test.express.caseHolder"],
     rawModules: [{
