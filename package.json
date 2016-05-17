@@ -21,12 +21,13 @@
   },
   "homepage": "https://github.com/GPII/gpii-couch-cushion/",
   "dependencies": {
-    "infusion": "2.0.0-dev.20151211T025229Z.eabb4fc",
-    "kettle": "git://github.com/amb26/kettle.git#cae26e655b57647a0a70fed4ba32b96d5e885c5e"
+    "infusion": "git://github.com/amb26/infusion.git#3c67d2d3d2fafbe6c21a6e9828be438eebe67299",
+    "kettle": "git://github.com/amb26/kettle.git#d808f3d5e326265aab9aaa1014703d75fa8ef0d0",
+    "qs": "6.2.0"
   },
   "devDependencies": {
-    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express.git#d4eee18a0f2286624fe70c7e0565a51a9fda3d0e",
-    "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#f2c57ad5e57ed9a33f9ebd3bacd364da9e66163a",
+    "gpii-express": "git://github.com/the-t-in-rtf/gpii-express.git#d3a21a9247a30a9bd9d0e8a3b6ffa9152a572b03",
+    "gpii-pouchdb": "git://github.com/the-t-in-rtf/gpii-pouchdb.git#280291cc1d598e5f2626461659f86193d78ef862",
     "grunt": "0.4.4",
     "grunt-contrib-jshint": "0.9.0",
     "grunt-jsonlint": "1.0.4",

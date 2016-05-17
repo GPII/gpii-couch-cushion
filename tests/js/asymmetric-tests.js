@@ -7,8 +7,10 @@ var jqUnit = require("node-jqunit");
 require("../../");
 require("./lib/");
 
-fluid.registerNamespace("gpii.couchdb.cushion.tests.asymmetricDataSource");
-gpii.couchdb.cushion.tests.asymmetricDataSource.checkOutput = function (message, output, expected) {
+// TODO:  Update to use the common grades in %gpii-pouchdb
+
+fluid.registerNamespace("gpii.couchdb.cushion.tests.dataSource.asymmetric");
+gpii.couchdb.cushion.tests.dataSource.asymmetric.checkOutput = function (message, output, expected) {
     // Compare everything but "rows"
     jqUnit.assertLeftHand(message + " (overall comparison)", fluid.filterKeys(expected, ["rows"], true), fluid.filterKeys(output, ["rows"], true));
 
@@ -22,8 +24,8 @@ gpii.couchdb.cushion.tests.asymmetricDataSource.checkOutput = function (message,
     }
 };
 
-fluid.defaults("gpii.couchdb.cushion.tests.asymmetricDataSource.base", {
-    gradeNames: ["gpii.couchdb.cushion.asymmetricDataSource"],
+fluid.defaults("gpii.couchdb.cushion.tests.dataSource.asymmetric.base", {
+    gradeNames: ["gpii.couchdb.cushion.dataSource.asymmetric"],
     endpoint: "_design/lookup/_view/byColor?startkey=%5B%22%color%22%2C%20%22aaa%22%5D&endkey=%5B%22%color%22%2C%20%22zzz%22%5D",
     readTermMap: {
         color: "%color"
@@ -37,37 +39,37 @@ fluid.defaults("gpii.couchdb.cushion.tests.asymmetricDataSource.base", {
     readUrl: {
         expander: {
             funcName: "fluid.stringTemplate",
-            args: ["%baseUrl%endpoint", { baseUrl: "{gpii.couchdb.cushion.tests.asymmetricDataSource.base}.options.baseUrl", endpoint: "{gpii.couchdb.cushion.tests.asymmetricDataSource.base}.options.endpoint"}]
+            args: ["%baseUrl%endpoint", { baseUrl: "{gpii.couchdb.cushion.tests.dataSource.asymmetric.base}.options.baseUrl", endpoint: "{gpii.couchdb.cushion.tests.dataSource.asymmetric.base}.options.endpoint"}]
         }
     },
     writeUrl: {
         expander: {
             funcName: "fluid.stringTemplate",
             // `%_id` will be replaced by a variable coming from our `directModel`.
-            args: ["%baseUrl%_id", { baseUrl: "{gpii.couchdb.cushion.tests.asymmetricDataSource.base}.options.baseUrl" }]
+            args: ["%baseUrl%_id", { baseUrl: "{gpii.couchdb.cushion.tests.dataSource.asymmetric.base}.options.baseUrl" }]
         }
     }
 });
 
 // A grade to test the "no wrapper" mix-in grade.
-fluid.defaults("gpii.couchdb.cushion.tests.asymmetricDataSource.unwrapped", {
-    gradeNames: ["gpii.couchdb.cushion.tests.asymmetricDataSource.base", "gpii.couchdb.cushion.asymmetricDataSource.noWrapper"]
+fluid.defaults("gpii.couchdb.cushion.tests.dataSource.asymmetric.unwrapped", {
+    gradeNames: ["gpii.couchdb.cushion.tests.dataSource.asymmetric.base", "gpii.couchdb.cushion.dataSource.asymmetric.noWrapper"]
 });
 
 // A grade to confirm that the default "value" wrapper is preserved.
-fluid.defaults("gpii.couchdb.cushion.tests.asymmetricDataSource.wrapped", {
-    gradeNames: ["gpii.couchdb.cushion.tests.asymmetricDataSource.base"],
+fluid.defaults("gpii.couchdb.cushion.tests.dataSource.asymmetric.wrapped", {
+    gradeNames: ["gpii.couchdb.cushion.tests.dataSource.asymmetric.base"],
     endpoint:   "_design/lookup/_view/wrapped" // Custom view to only show "wrapped" records
 });
 
 // A grade that can only hope to fail.
-fluid.defaults("gpii.couchdb.cushion.tests.asymmetricDataSource.bornToLose", {
-    gradeNames: ["gpii.couchdb.cushion.tests.asymmetricDataSource.base"],
+fluid.defaults("gpii.couchdb.cushion.tests.dataSource.asymmetric.bornToLose", {
+    gradeNames: ["gpii.couchdb.cushion.tests.dataSource.asymmetric.base"],
     readUrl:    "http://not.found/bad/path/",
     writeUrl:   "http://not.found/bad/path/"
 });
 
-fluid.defaults("gpii.couchdb.cushion.tests.asymmetricDataSource.caseHolder", {
+fluid.defaults("gpii.couchdb.cushion.tests.dataSource.asymmetric.caseHolder", {
     gradeNames: ["gpii.couchdb.cushion.tests.caseHolder"],
     rawModules: [{
         tests: [
@@ -79,7 +81,7 @@ fluid.defaults("gpii.couchdb.cushion.tests.asymmetricDataSource.caseHolder", {
                         func: "{wrapped}.get"
                     },
                     {
-                        listener: "gpii.couchdb.cushion.tests.asymmetricDataSource.checkOutput",
+                        listener: "gpii.couchdb.cushion.tests.dataSource.asymmetric.checkOutput",
                         event:    "{wrapped}.events.onRead",
                         args:     ["Data read from the 'value' wrapper should be as expected...", "{arguments}.0", "{testEnvironment}.options.expected.wrapped.initialRead"] // message, output, expected
                     }
@@ -102,7 +104,7 @@ fluid.defaults("gpii.couchdb.cushion.tests.asymmetricDataSource.caseHolder", {
             //            func: "{wrapped}.get"
             //        },
             //        {
-            //            listener: "gpii.couchdb.cushion.tests.asymmetricDataSource.checkOutput",
+            //            listener: "gpii.couchdb.cushion.tests.dataSource.asymmetric.checkOutput",
             //            event:    "{wrapped}.events.onRead",
             //            args:     ["Data read after writing with the default grade should be as expected...", "{arguments}.0", "{testEnvironment}.options.expected.wrapped.readAfterInsert"] // message, output, expected
             //        }
@@ -125,7 +127,7 @@ fluid.defaults("gpii.couchdb.cushion.tests.asymmetricDataSource.caseHolder", {
             //            func: "{wrapped}.get"
             //        },
             //        {
-            //            listener: "gpii.couchdb.cushion.tests.asymmetricDataSource.checkOutput",
+            //            listener: "gpii.couchdb.cushion.tests.dataSource.asymmetric.checkOutput",
             //            event:    "{wrapped}.events.onRead",
             //            args:     ["Data read after writing with the default grade should be as expected...", "{arguments}.0", "{testEnvironment}.options.expected.wrapped.readAfterUpdate"] // message, output, expected
             //        }
@@ -140,7 +142,7 @@ fluid.defaults("gpii.couchdb.cushion.tests.asymmetricDataSource.caseHolder", {
                         args: [{ color: "red" }]
                     },
                     {
-                        listener: "gpii.couchdb.cushion.tests.asymmetricDataSource.checkOutput",
+                        listener: "gpii.couchdb.cushion.tests.dataSource.asymmetric.checkOutput",
                         event:    "{unwrapped}.events.onRead",
                         args:     ["Data read from the `noWrapper` grade should be as expected...", "{arguments}.0", "{testEnvironment}.options.expected.unwrapped.initialRead"] // message, output, expected
                     }
@@ -164,7 +166,7 @@ fluid.defaults("gpii.couchdb.cushion.tests.asymmetricDataSource.caseHolder", {
             //            args: [{ color: "red" }]
             //        },
             //        {
-            //            listener: "gpii.couchdb.cushion.tests.asymmetricDataSource.checkOutput",
+            //            listener: "gpii.couchdb.cushion.tests.dataSource.asymmetric.checkOutput",
             //            event:    "{unwrapped}.events.onRead",
             //            args:     ["Data read after a writing with the `noWrapper` grade should be as expected...", "{arguments}.0", "{testEnvironment}.options.expected.unwrapped.readAfterInsert"] // message, output, expected
             //        }
@@ -188,7 +190,7 @@ fluid.defaults("gpii.couchdb.cushion.tests.asymmetricDataSource.caseHolder", {
             //            args: [{ color: "red" }]
             //        },
             //        {
-            //            listener: "gpii.couchdb.cushion.tests.asymmetricDataSource.checkOutput",
+            //            listener: "gpii.couchdb.cushion.tests.dataSource.asymmetric.checkOutput",
             //            event:    "{unwrapped}.events.onRead",
             //            args:     ["Data should be updated as expected...", "{arguments}.0", "{testEnvironment}.options.expected.unwrapped.readAfterUpdate"] // message, output, expected
             //        }
@@ -220,13 +222,13 @@ fluid.defaults("gpii.couchdb.cushion.tests.asymmetricDataSource.caseHolder", {
     }],
     components: {
         bornToLose: {
-            type: "gpii.couchdb.cushion.tests.asymmetricDataSource.bornToLose"
+            type: "gpii.couchdb.cushion.tests.dataSource.asymmetric.bornToLose"
         },
         unwrapped: {
-            type: "gpii.couchdb.cushion.tests.asymmetricDataSource.unwrapped"
+            type: "gpii.couchdb.cushion.tests.dataSource.asymmetric.unwrapped"
         },
         wrapped: {
-            type: "gpii.couchdb.cushion.tests.asymmetricDataSource.wrapped"
+            type: "gpii.couchdb.cushion.tests.dataSource.asymmetric.wrapped"
         }
     }
 });
@@ -262,7 +264,7 @@ gpii.couchdb.cushion.tests.environment({
     },
     components: {
         caseHolder: {
-            type: "gpii.couchdb.cushion.tests.asymmetricDataSource.caseHolder"
+            type: "gpii.couchdb.cushion.tests.dataSource.asymmetric.caseHolder"
         }
     }
 });

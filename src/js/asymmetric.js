@@ -3,17 +3,20 @@
     An "asymmetric" dataSource designed to read from a CouchDB view, list, show, etc. and to write to CouchDB's
     document API. See the documentation for details:
 
-    https://github.com/the-t-in-rtf/gpii-couch-cushion/blob/GPII-1253/docs/asymmetric.md
+    https://github.com/GPII/gpii-couch-cushion/blob/master/docs/asymmetric.md
 
  */
+// TODO:  Discuss with Antranig how best to break this down properly into a writable and read-only grade.
 "use strict";
 var fluid = fluid || require("infusion");
 
-require("kettle");
+fluid.require("%kettle");
 
 require("./lib/transformEach");
 
-fluid.defaults("gpii.couchdb.cushion.asymmetricDataSource", {
+// TODO:  Update this to pass in "reader" grades so that we can easily use either a raw `kettle.dataSource.URL` or our own `urlEncodedJsonReader`.
+
+fluid.defaults("gpii.couchdb.cushion.dataSource.asymmetric", {
     gradeNames: ["fluid.component"],
     events: {
         onRead:       null,
@@ -48,14 +51,14 @@ fluid.defaults("gpii.couchdb.cushion.asymmetricDataSource", {
                         }
                     }
                 },
-                url:         "{gpii.couchdb.cushion.asymmetricDataSource}.options.readUrl",
-                termMap:     "{gpii.couchdb.cushion.asymmetricDataSource}.options.readTermMap",
+                url:         "{gpii.couchdb.cushion.dataSource.asymmetric}.options.readUrl",
+                termMap:     "{gpii.couchdb.cushion.dataSource.asymmetric}.options.readTermMap",
                 listeners: {
                     "onError.notifyParent": {
-                        func: "{gpii.couchdb.cushion.asymmetricDataSource}.events.onReadError.fire"
+                        func: "{gpii.couchdb.cushion.dataSource.asymmetric}.events.onReadError.fire"
                     },
                     "onRead.notifyParent": {
-                        func: "{gpii.couchdb.cushion.asymmetricDataSource}.events.onRead.fire"
+                        func: "{gpii.couchdb.cushion.dataSource.asymmetric}.events.onRead.fire"
                     }
                 }
             }
@@ -68,14 +71,14 @@ fluid.defaults("gpii.couchdb.cushion.asymmetricDataSource", {
                 model: {
                     setModel: true
                 },
-                url:         "{gpii.couchdb.cushion.asymmetricDataSource}.options.writeUrl",
-                termMap:     "{gpii.couchdb.cushion.asymmetricDataSource}.options.writeTermMap",
+                url:         "{gpii.couchdb.cushion.dataSource.asymmetric}.options.writeUrl",
+                termMap:     "{gpii.couchdb.cushion.dataSource.asymmetric}.options.writeTermMap",
                 listeners: {
                     "onError.notifyParent": {
-                        func: "{gpii.couchdb.cushion.asymmetricDataSource}.events.onWriteError.fire"
+                        func: "{gpii.couchdb.cushion.dataSource.asymmetric}.events.onWriteError.fire"
                     },
                     "onWrite.notifyParent": {
-                        func: "{gpii.couchdb.cushion.asymmetricDataSource}.events.onWrite.fire"
+                        func: "{gpii.couchdb.cushion.dataSource.asymmetric}.events.onWrite.fire"
                     }
                 }
             }
@@ -94,7 +97,7 @@ fluid.defaults("gpii.couchdb.cushion.asymmetricDataSource", {
 });
 
 // A mix-in grade to override the default "value" wrapping for the "write" payload and encode the full record instead.
-fluid.defaults("gpii.couchdb.cushion.asymmetricDataSource.noWrapper", {
+fluid.defaults("gpii.couchdb.cushion.dataSource.asymmetric.noWrapper", {
     components: {
         setter: {
             options: {
