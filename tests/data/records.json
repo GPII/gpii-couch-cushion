@@ -1,0 +1,21 @@
+{
+  "docs": [
+    { "_id": "strawberry", "name": "strawberry", "color": "red" },
+    { "_id": "raspberry",  "name": "raspberry",  "color": "red" },
+    { "_id": "cherry",     "name": "cherry",     "color": "red" },
+    { "_id": "lemon",      "name": "lemon",      "color": "yellow" },
+    { "_id": "banana",     "name": "banana",     "color": "yellow" },
+    { "_id": "wrapped",    "value": { "foo": "bar"} },
+    {
+      "_id": "_design/lookup",
+      "views": {
+        "byColor": {
+          "map": "function (doc) {\n if (doc.color) { emit([doc.color, doc.name], doc); \n } \n}"
+        },
+        "wrapped": {
+          "map": "function (doc) {\n if (doc.value) { emit(doc._id, doc); \n } \n}"
+        }
+      }
+    }
+  ]
+}
